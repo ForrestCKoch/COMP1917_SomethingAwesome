@@ -7,6 +7,8 @@ all:
 	make algorithms
 	make testAlgorithms
 	make tests
+clean:
+	rm $(OBJECTS) Tests/testAlgorithms.o Tests/TestsMain
 
 compFuncs:
 	gcc $(CFLAGS) -c -o compareFunctions.o compareFunctions.c
