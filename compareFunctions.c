@@ -4,8 +4,10 @@
 #include "compareFunctions.h"
 
 int lowHighNum(const void * a, const void * b){
+    const int pa = *(const int *)a;
+    const int pb = *(const int *)b;
 
-    return(*(int *) a - *(int *) b);
+    return(pa - pb);
 }
 
 int myStrCmp(const void * a, const void * b){

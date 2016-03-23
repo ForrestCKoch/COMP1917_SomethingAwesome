@@ -1,8 +1,7 @@
 #include <stdlib.h>
 #include "algorithms.h"
 
-void myQsort(void *arry, int numElements, int sizeElements, 
-	     int (*cmpFunc)(const void * a, const void * b)){
+void myQsort(void *arry, int numElements, int sizeElements, CmpFunc func){
 
-    qsort(arry, numElements, sizeElements, cmpFunc);
+    qsort(arry, numElements, sizeElements, func);
 }

@@ -10,6 +10,7 @@ int main(int argc, char *argv[]){
     char inputFile[FILENAME_LENGTH];
     char outputFile[FILENAME_LENGTH];
 
+    
     // Should we move this out of main?
     if(argc != 3){
 	printf("Proper usage is \"./Prog input.file output.file\".\n");
