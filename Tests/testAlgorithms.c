@@ -14,8 +14,7 @@ void addAllAlgorithms(void){
 }
 
 
-void testNumArry(void (*sort)(void *arry, int numElements, int sizeElements,
-		 int (*cmpFunc)(const void * a, const void * b)), int sampleSize){
+void testNumArry(SortFunc sort, int sampleSize){
 
     int *arry = (int *)malloc(sampleSize * sizeof(int));
     
@@ -34,9 +33,7 @@ void testNumArry(void (*sort)(void *arry, int numElements, int sizeElements,
     free(arry);
 }
 
-void testStrArry(void (*sort)(void *arry, int numElements, int sizeElements,
-		 int (*cmpFunc)(const void * a, const void * b))){
-    //NOT WORKING!
+void testStrArry(SortFunc sort){
     int i;
 
     char *strArry[TEST_STRING_GROUP_ELEMENTS] = {TEST_STRING_GROUP};
