@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
+//MOVE THIS OUT!
 #define FILENAME_LENGTH 20
 
 int main(int argc, char *argv[]){
