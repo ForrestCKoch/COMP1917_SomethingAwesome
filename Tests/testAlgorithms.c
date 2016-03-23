@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "testAlgorithms.h"
-#include "../compareFunctions.h"
+#include "../numbers.h"
+#include "../strings.h"
 #include "../algorithms.h"
 
 
