@@ -20,6 +20,15 @@ int main(int argc, char *argv[]){
     strcpy(inputFile, argv[1]);
     strcpy(outputFile, argv[2]);
 
+    // createJob should take in: 
+    //	    - name of input/outputfiles
+    //	    - sorting algorithm to use
+    //	    - number threads to use
+    //	    - data info struct?:
+    //		- pointer to data read function
+    //		- pointer to compare function
+    //		- size of data?
+    // createJob();
 
 
     return EXIT_SUCCESS;
