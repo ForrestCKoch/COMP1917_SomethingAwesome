@@ -1,7 +1,8 @@
 #include <glib.h>
 #include <stdlib.h>
 #include <time.h>
-#include "testAlgorithms.h"
+#include "testNumbers.h"
+#include "testStrings.h"
 //DONT FORGET TO INCLUDE NECCESSARY FILES!
 
 int main(int argc, char *argv[]){
@@ -14,7 +15,8 @@ int main(int argc, char *argv[]){
     g_test_init(&argc, &argv, NULL);
  
     //Insert g_test_add_func's here
-    addAllAlgorithms();
+    addAllNumbersTests();
+    addAllStringsTests();
 
     return g_test_run();
 }
