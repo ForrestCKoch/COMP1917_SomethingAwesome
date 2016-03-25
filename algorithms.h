@@ -1,8 +1,10 @@
 #ifndef ALGORITHMS_H
 #define ALGORITHMS_H
+#include "modules.h"
 
-typedef int (*CmpFunc)(const void * a, const void *b);
-
-void myQsort(void *arry, int numElements, int sizeElements, CmpFunc cmp);
+typedef void (*SortFunc)(void *arry, int numElmnts,
+			 int sizeElmnts, CmpFunc cmp);
+			 
+void myQsort(void *arry, int numElmnts, int sizeElmnts, CmpFunc cmp);
 
 #endif

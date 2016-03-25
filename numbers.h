@@ -1,7 +1,7 @@
 #ifndef NUMBERS_H
 #define NUMBERS_H
 
-int lowHighNum(const void * a, const void * b);
+int numberCmp(const void * a, const void * b);
 
 
 #endif
