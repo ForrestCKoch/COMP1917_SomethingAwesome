@@ -8,3 +8,7 @@ int stringCmp(const void * a, const void * b){
 
     return(strcmp(pa, pb));
 }
+
+void stringsLoadModule(dataStruct *modData){
+//insert code here
+}

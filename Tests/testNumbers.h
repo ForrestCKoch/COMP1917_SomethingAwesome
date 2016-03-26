@@ -17,6 +17,7 @@ void smallTestNumbersCmp(void);
 void largeTestNumbersCmp(void);
 void testNumbersGetAmount(void);
 void testNumbersFillArray(void);
-void testNumbersWrite(void);
+void testNumbers(void);
+void testLoadNumbers(void);
 
 #endif

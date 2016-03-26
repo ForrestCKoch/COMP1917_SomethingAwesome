@@ -10,11 +10,13 @@ void addAllNumbersTests(void){
     g_test_add_func("/Tests/Numbers/largeNumberCmp", largeTestNumbersCmp);
     g_test_add_func("/Tests/Numbers/numbersGetAmount", testNumbersGetAmount);
     g_test_add_func("/Tests/Numbers/numbersFillArray", testNumbersFillArray);
+    g_test_add_func("/Tests/Numbers/numbers", testNumbers);
+    g_test_add_func("/Tests/Numbers/loadNumbers", testLoadNumbers);
 }
 
 void testNumbersCmp(SortFunc sort, int sampleSize){
     
-    int *arry = (int *)malloc(sampleSize * sizeof(int));
+    int *arry = (int *)malloc(sampleSize * NUMBERS_SIZE);
 
     int i;
 
@@ -22,7 +24,7 @@ void testNumbersCmp(SortFunc sort, int sampleSize){
 	arry[i] = rand();
     }
 
-    sort(arry, sampleSize, sizeof(int), numbersCmp);
+    sort(arry, sampleSize, NUMBERS_SIZE, numbersCmp);
 
     for(i = 0; i < sampleSize - 1; i++){
 	g_assert(arry[i] <= arry[i + 1]);
@@ -61,8 +63,8 @@ void testNumbersFillArray(void){
     FILE *fp;
     void *array;
     int *nArray;
-    int fib[] = {0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 
-	       144, 233, 377, 610, 987, 1597, 2584, 4181};
+    int fib[] = {4181 ,2584 ,1597 ,987 ,610 ,377 ,233 , 144 ,89 ,
+                 55 , 34, 21 ,13 ,8 ,5 ,3 ,2 ,1 ,1 ,0};
     int i;
 
 
@@ -72,7 +74,7 @@ void testNumbersFillArray(void){
 	exit(1);
     }
 
-    array = malloc(sizeof(int) * TEST_FILE_NUM);
+    array = malloc(NUMBERS_SIZE * TEST_FILE_NUM);
 
     nArray = array;
 
@@ -83,4 +85,76 @@ void testNumbersFillArray(void){
     }
     
     fclose(fp);
+    free(array);
+}
+
+void testNumbers(void){
+    
+    FILE *input;
+    FILE *output;
+    void *array;
+    int numElmnts;
+
+    void *testArray;
+    int *testnArray;
+    int i;
+
+    input = fopen(TEST_FILE_INPUT, "r");
+    if(input == NULL){
+	printf("Could not open file\n");
+	exit(1);
+    }
+
+    numElmnts = numbersGetAmount(input);
+    array = malloc(numElmnts * NUMBERS_SIZE);
+
+    numbersFillArray(input, numElmnts, array);
+    fclose(input);
+
+    myQsort(array, numElmnts, NUMBERS_SIZE, numbersCmp);
+
+    output = fopen(TEST_FILE_OUTPUT, "w");
+    if(output == NULL){
+	printf("Could not open file\n");
+	exit(1);
+    }
+
+    numbersWrite(output, numElmnts, array);
+
+    fclose(output);
+    free(array);
+
+    //Confirm the output is valid!
+    testArray = malloc(numElmnts * NUMBERS_SIZE);
+    testnArray = testArray;
+
+    input = fopen(TEST_FILE_OUTPUT, "r");
+    if(input == NULL){
+	printf("Could not open file\n");
+	exit(1);
+    }
+
+    numbersFillArray(input, numElmnts, testArray);
+    fclose(input);
+
+    for(i = 0; i < numElmnts - 1; i++){
+	g_assert(testnArray[i] <= testnArray[i + 1]);
+    }
+    free(testArray);
+}
+    
+
+void testLoadNumbers(void){
+    
+    dataStruct *modData;
+    
+    modData = malloc(sizeof(dataStruct));
+
+    loadModule(modData, NUMBERS);
+
+    g_assert(modData->dataSize == NUMBERS_SIZE);
+    g_assert(modData->getAmount == numbersGetAmount);
+    g_assert(modData->cmp == numbersCmp);
+    g_assert(modData->fillArray == numbersFillArray);
+    g_assert(modData->writeFile == numbersWrite);
 }

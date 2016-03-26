@@ -72,3 +72,11 @@ void numbersWrite(FILE *fp, int numElmnts, void *array){
     }
 }
 
+void numbersLoadModule(dataStruct *modData){
+
+    modData->dataSize = NUMBERS_SIZE;
+    modData->cmp = numbersCmp;
+    modData->getAmount = numbersGetAmount;
+    modData->fillArray = numbersFillArray;
+    modData->writeFile = numbersWrite;
+}

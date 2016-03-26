@@ -1,17 +1,22 @@
 CFLAGS = -g -Wall
 GLIB = `pkg-config --cflags --libs glib-2.0`
-OBJECTS = algorithms.o numbers.o strings.o
+MODULES = numbers.o strings.o
+OBJECTS = algorithms.o numbers.o strings.o modules.o
 TEST_OBJECTS = Tests/testNumbers.o Tests/testStrings.o
 
 all:
 	make numbers
 	make strings
+	make modules
 	make algorithms
 	make testNumbers
 	make testStrings
 	make tests
 clean:
-	rm $(OBJECTS) $(TEST_OBJECTS) Tests/TestsMain
+	rm $(OBJECTS) $(TEST_OBJECTS) Tests/TestsMain Tests/testNumbersOutput.txt
+
+modules: $(MODULES)
+	gcc $(CFLAGS) -c -o modules.o modules.c $(MODULES)
 
 numbers:
 	gcc $(CFLAGS) -c -o numbers.o numbers.c
