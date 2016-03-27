@@ -2,14 +2,21 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "core.h"
+#include "algorithms.h"
+#include "modules.h"
+
 //MOVE THIS OUT!
 #define FILENAME_LENGTH 20
+#define THREADS 1
 
 int main(int argc, char *argv[]){
 
     char inputFile[FILENAME_LENGTH];
     char outputFile[FILENAME_LENGTH];
 
+    SortFunc sort;
+    dataStruct *modData;
     
     // Should we move this out of main?
     if(argc != 3){
@@ -21,6 +28,11 @@ int main(int argc, char *argv[]){
     strcpy(inputFile, argv[1]);
     strcpy(outputFile, argv[2]);
 
+    modData = (dataStruct *)malloc(sizeof(dataStruct));
+    loadModule(modData, "NUMBERS");
+
+    sort = loadSort("MYQSORT");
+
     // createJob should take in: 
     //	    - name of input/outputfiles
     //	    - sorting algorithm to use
@@ -30,7 +42,9 @@ int main(int argc, char *argv[]){
     //		- pointer to compare function
     //		- size of data?
     // createJob();
+    createJob(inputFile, outputFile, THREADS, sort, modData);
 
+    free(modData);
 
     return EXIT_SUCCESS;
 }
