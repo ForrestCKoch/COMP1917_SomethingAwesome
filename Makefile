@@ -18,7 +18,7 @@ clean:
 	rm ./Main $(OBJECTS) $(TEST_OBJECTS) Tests/TestsMain Tests/testNumbersOutput.txt
 
 modules: $(MODULES)
-	gcc $(CFLAGS) -c -o modules.o modules.c $(MODULES)
+	gcc $(CFLAGS) -c -o modules.o modules.c
 
 numbers:
 	gcc $(CFLAGS) -c -o numbers.o numbers.c
@@ -36,10 +36,10 @@ main: $(OBJECTS)
 	gcc $(CFLAGS) -o Main main.c $(OBJECTS)
 
 testNumbers: algorithms.o numbers.o
-	gcc $(CFLAGS) -c -o Tests/testNumbers.o Tests/testNumbers.c algorithms.o numbers.o $(GLIB)
+	gcc $(CFLAGS) -c -o Tests/testNumbers.o Tests/testNumbers.c  $(GLIB)
 
 testStrings: algorithms.o strings.o
-	gcc $(CFLAGS) -c -o Tests/testStrings.o Tests/testStrings.c algorithms.o strings.o $(GLIB)
+	gcc $(CFLAGS) -c -o Tests/testStrings.o Tests/testStrings.c $(GLIB)
 
 tests: Tests/testNumbers.o Tests/testStrings.o
 	gcc $(CFLAGS) -o Tests/TestsMain Tests/testMain.c $(TEST_OBJECTS) $(OBJECTS) $(GLIB)

@@ -37,7 +37,9 @@ void createJob(char *input, char *output, int threads,
 
     modData->writeFile(outputFile, numElmnts, array);
     free(array);
+    array = NULL;
     fclose(outputFile);
+    outputFile = NULL;
 }
 
 void threadedSort(SortFunc sort, CmpFunc cmp, int threads, void *array,
