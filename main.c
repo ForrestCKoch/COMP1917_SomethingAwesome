@@ -8,7 +8,7 @@
 
 //MOVE THIS OUT!
 #define FILENAME_LENGTH 20
-#define THREADS 1
+#define THREAD_POWER 0
 
 int main(int argc, char *argv[]){
 
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]){
     //		- pointer to compare function
     //		- size of data?
     // createJob();
-    createJob(inputFile, outputFile, THREADS, sort, modData);
+    createJob(inputFile, outputFile, THREAD_POWER, sort, modData);
 
     free(modData);
     modData = NULL
