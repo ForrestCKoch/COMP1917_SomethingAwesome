@@ -144,7 +144,7 @@ void insertSort(ThreadStruct *output, ThreadStruct *inputOne,
     //Let's pray there's no overflow here!
     while(lengthOne != i && lengthTwo != j){
 	if(cmp(inputOne->array + (i * dataSize), 
-		inputTwo->array + (j * dataSize)) > 0){
+		inputTwo->array + (j * dataSize)) < 0){
 	    
 	    memcpy(output->array + ((i + j) * dataSize),
 		   inputOne->array + (i * dataSize), dataSize);
