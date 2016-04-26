@@ -31,7 +31,7 @@ void testNumbersCmp(SortFunc sort, int sampleSize){
     }
 
     free(array);
-    arry = NULL;
+    array = NULL;
 }
 
 void smallTestNumbersCmp(void){

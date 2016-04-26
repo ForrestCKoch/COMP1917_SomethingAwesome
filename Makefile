@@ -1,4 +1,4 @@
-CFLAGS = -g -Wall -lm
+CFLAGS = -g -Wall -lm -pthread
 GLIB = `pkg-config --cflags --libs glib-2.0`
 MODULES = numbers.o strings.o
 OBJECTS = algorithms.o numbers.o strings.o modules.o core.o

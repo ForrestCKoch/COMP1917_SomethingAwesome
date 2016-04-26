@@ -4,6 +4,9 @@
 #include "core.h"
 #include "modules.h"
 #include "algorithms.h"
+#include <assert.h>
+#include <string.h>
+#include <pthread.h>
 
 void createJob(char *input, char *output, int threadPower,
 	       SortFunc sort, dataStruct *modData){
@@ -36,14 +39,8 @@ void createJob(char *input, char *output, int threadPower,
     threadData->dataSize = modData->dataSize;
     threadData->array = array;
 
-    //special case if we don't need to bother splitting up
-    if(!threadPower){
-	sort(array, numElmnts, modData->dataSize, modData->cmp);
-    }
-    else{
-	//This is where all the action is!
-	splitArray(threadData);
-    }
+    //This is where all the action is!
+    splitArray(threadData);
 
     outputFile = fopen(output, "w");
     if(outputFile == NULL){
@@ -60,41 +57,117 @@ void createJob(char *input, char *output, int threadPower,
     outputFile = NULL;
 }
 
-void splitArray(ThreadStruct *threadData){
+void *splitArray(void *Data){
 
-    if(cycles){
+    ThreadStruct *threadData;
+    threadData = Data;
+
+    if(threadData->cycles){
 	//divide up and have sorted
-	ThreadStruct threadOne;
-	ThreadStruct threadTwo;
-	void *arrayOne;
-	void *arrayTwo;
+	ThreadStruct *threadOne = malloc(sizeof(ThreadStruct));
+	ThreadStruct *threadTwo = malloc(sizeof(ThreadStruct));
+
+	//This should be put into a separate function
+	threadOne->cycles = threadData->cycles - 1;
+	threadTwo->cycles = threadData->cycles - 1;
+
+	threadOne->dataSize = threadData->dataSize;
+	threadTwo->dataSize = threadData->dataSize;
+
+	threadOne->sort = threadData->sort;
+	threadTwo->sort = threadData->sort;
+
+	threadOne->cmp = threadData->cmp;
+	threadTwo->cmp = threadData->cmp;
+
+	pthread_t tidOne;
+	pthread_t tidTwo;
+
+	int numElmnts = threadData->numElmnts;
+	int dataSize = threadData->dataSize;
 
 	//Keep track of how many elements in each array
-	int numOne;
-	int numTwo;
-
-	pthread_t threadOne;
-	pthread_t threadTwo;
-
-	numOne = numElmnts / 2;
+	threadOne->numElmnts = numElmnts / 2;
 	if(numElmnts % 2){
-	    numTwo = numOne + 1;
+	    threadTwo->numElmnts = threadOne->numElmnts + 1;
 	} else{
-	    numTwo = numOne
+	    threadTwo->numElmnts = threadOne->numElmnts;
 	}
 
-	assert(numOne + numTwo = numElmnts);
+	assert(threadOne->numElmnts + threadTwo->numElmnts == numElmnts);
 	
-	arrayOne = (void *)malloc(numOne * dataSize);
-	arrayTwo = (void *)malloc(numTwo * dataSize);
+	threadOne->array = (void *)malloc(threadOne->numElmnts * dataSize);
+	threadTwo->array = (void *)malloc(threadTwo->numElmnts * dataSize);
 	
 	//copy first half of array into arrayOne
-	memcpy(array, arrayOne, numOne * dataSize);
+	memcpy(threadOne->array, threadData->array, threadOne->numElmnts * dataSize);
 	//copy second half of array into arrayTwo
-	memcpy((array + (numOne * dataSize)), arrayTwo, numTwo * dataSize);
+	memcpy(threadTwo->array, threadData->array + (threadOne->numElmnts * dataSize), 
+	       threadTwo->numElmnts * dataSize);
 
-	pthread_create(&threadOne, NULL, splitArray, (void*)/*THREADSTRUCT*/);
+	pthread_create(&tidOne, NULL, splitArray, (void*)threadOne);
+	pthread_create(&tidTwo, NULL, splitArray, (void*)threadTwo);
 
 // PICK UP FROM HERE
+	pthread_join(tidOne, NULL);
+	pthread_join(tidTwo, NULL);
+    
+	insertSort(threadData, threadOne, threadTwo);
+    
+	free(threadOne->array);
+	free(threadTwo->array);
+	free(threadOne);
+	free(threadTwo);
 
+    }else{
+    
+	threadData->sort(threadData->array, threadData->numElmnts,
+			 threadData->dataSize, threadData->cmp);
+    }
 
+    return NULL;
+}
+
+void insertSort(ThreadStruct *output, ThreadStruct *inputOne,
+		ThreadStruct *inputTwo){
+
+    CmpFunc cmp = output->cmp;
+
+    int lengthOne = inputOne->numElmnts;
+    int lengthTwo = inputTwo->numElmnts;
+
+    int dataSize = output->dataSize;
+
+    int i = 0;
+    int j = 0;
+
+    //Let's pray there's no overflow here!
+    while(lengthOne != i && lengthTwo != j){
+	if(cmp(inputOne->array + (i * dataSize), 
+		inputTwo->array + (j * dataSize)) > 0){
+	    
+	    memcpy(output->array + ((i + j) * dataSize),
+		   inputOne->array + (i * dataSize), dataSize);
+	    i++;
+	
+	}else{
+
+	    memcpy(output->array + ((i + j) * dataSize),
+		   inputTwo->array + (j * dataSize), dataSize);
+	    j++;
+	}
+    }
+
+    while(lengthOne != i){
+	
+	memcpy(output->array + ((i + j) * dataSize),
+	       inputOne->array + (i * dataSize), dataSize);
+	i++;
+    }
+    while(lengthTwo != j){
+
+	memcpy(output->array + ((i + j) * dataSize),
+	       inputTwo->array + (j * dataSize), dataSize);
+	j++;
+    }
+}

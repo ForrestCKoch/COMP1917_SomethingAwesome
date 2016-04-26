@@ -45,7 +45,7 @@ int main(int argc, char *argv[]){
     createJob(inputFile, outputFile, THREAD_POWER, sort, modData);
 
     free(modData);
-    modData = NULL
+    modData = NULL;
 
     return EXIT_SUCCESS;
 }
