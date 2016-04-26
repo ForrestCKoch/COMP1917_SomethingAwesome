@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <time.h>
 
 #include "core.h"
 #include "algorithms.h"
@@ -17,6 +18,10 @@ int main(int argc, char *argv[]){
     char outputFile[FILENAME_LENGTH];
 
     int threadPower;
+
+    time_t start;
+    time_t end;
+    int sec;
 
     SortFunc sort;
     dataStruct *modData;
@@ -46,10 +51,15 @@ int main(int argc, char *argv[]){
     //		- pointer to compare function
     //		- size of data?
     // createJob();
+    start = time(NULL);
     createJob(inputFile, outputFile, threadPower, sort, modData);
-
+    end = time(NULL);
+    
     free(modData);
     modData = NULL;
+
+    sec = end - start;
+    printf("%d seconds to sort\n", sec);
 
     return EXIT_SUCCESS;
 }
