@@ -16,21 +16,22 @@ void addAllNumbersTests(void){
 
 void testNumbersCmp(SortFunc sort, int sampleSize){
     
-    int *arry = (int *)malloc(sampleSize * NUMBERS_SIZE);
+    int *array = (int *)malloc(sampleSize * NUMBERS_SIZE);
 
     int i;
 
     for(i = 0; i < sampleSize; i++){
-	arry[i] = rand();
+	array[i] = rand();
     }
 
-    sort(arry, sampleSize, NUMBERS_SIZE, numbersCmp);
+    sort(array, sampleSize, NUMBERS_SIZE, numbersCmp);
 
     for(i = 0; i < sampleSize - 1; i++){
-	g_assert(arry[i] <= arry[i + 1]);
+	g_assert(array[i] <= array[i + 1]);
     }
 
-    free(arry);
+    free(array);
+    array = NULL;
 }
 
 void smallTestNumbersCmp(void){
@@ -56,6 +57,7 @@ void testNumbersGetAmount(void){
     g_assert(numbersGetAmount(fp) == TEST_FILE_NUM);
 
     fclose(fp);
+    fp = NULL;
 }
 
 void testNumbersFillArray(void){
@@ -85,7 +87,9 @@ void testNumbersFillArray(void){
     }
     
     fclose(fp);
+    fp = NULL;
     free(array);
+    array = NULL;
 }
 
 void testNumbers(void){
