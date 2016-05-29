@@ -9,7 +9,7 @@ int main(int argc, char *argv[]){
 
     g_test_init(&argc, &argv, NULL);
 
-    addTestArray;
+    addTestArray();
 
-    return g_tests_run();
+    return g_test_run();
 }

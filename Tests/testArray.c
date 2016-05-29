@@ -8,7 +8,7 @@ void testDisposeArray(void);
 
 void addTestArray(void){
 
-    g_test_add_func("Tests/testArray", testArray);
+    g_test_add_func("/Tests/testArray", testArray);
 
 }
 
@@ -37,7 +37,7 @@ void testArray(void){
     g_assert(testArray == NULL);
 
     // disposeArray shouldn't crash if passing NULL pointer
-    diposeArray(&testArray);
+    disposeArray(&testArray);
     g_assert(testArray == NULL);
 
     // ************************************************************************
@@ -58,13 +58,13 @@ void testArray(void){
     g_assert(sizeElmnts == TEST_DATA_SIZE);
 
     for(int i = 0; i < TEST_SIZE; i++){
-        setElmnt(i, (void *)i, testArray);
+        setElmnt(i, (void *)&i, testArray);
     }
 
     for(int i = 0; i < TEST_SIZE; i++){
-        int value = (int)getElmnt(i, testArray);
+        int value = *(int *)getElmnt(i, testArray);
         g_assert(value == i);
     }
 
-    disposeArray(testArray);
+    disposeArray(&testArray);
 }
