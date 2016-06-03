@@ -1,6 +1,7 @@
 #include <glib.h>
-#include "testArray.h"
+#include "tests.h"
 #include "../Array.h"
+#include <stdio.h>
 
 void testArray(void);
 void testNewArray(void);
@@ -24,8 +25,10 @@ void testArray(void){
     testArray = newArray(sizeof(int), 0);
     g_assert(testArray == NULL);
 
+    /*
     testArray = newArray(sizeof(int), -1);
     g_assert(testArray == NULL);
+    */
 
     // newArray should return pointer if successful
     testArray = newArray(sizeof(int), 4);

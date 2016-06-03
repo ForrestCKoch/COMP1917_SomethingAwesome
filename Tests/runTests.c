@@ -1,7 +1,7 @@
 #include <glib.h>
 #include <stdlib.h>
 #include <time.h>
-#include "testArray.h"
+#include "tests.h"
 
 int main(int argc, char *argv[]){
     

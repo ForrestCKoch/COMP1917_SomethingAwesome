@@ -31,11 +31,13 @@ Array newArray(size_t size, size_t num){
 
 void disposeArray(Array *a){
     
-    free((*a)->data);
-    (*a)->data = NULL;
+    if(*a){
+        free((*a)->data);
+        (*a)->data = NULL;
 
-    free(a);
-    a = NULL;
+        free(*a);
+        *a = NULL;
+    }
 }
 
 size_t getNumElmnts(Array a){
@@ -57,7 +59,7 @@ void * getElmnt(size_t index, Array a){
 
     void *elmnt;
 
-    elmnt = a->data + (a->size & index);
+    elmnt = a->data + (a->size * index);
 
     return elmnt;
 }
