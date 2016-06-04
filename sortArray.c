@@ -3,16 +3,9 @@
 #include "defs.h"
 
 typedef struct _threadArgs{
-    Array array,
+    Array array;
     SortFunc sort;
-    CmpFunc cmp;int int_cmp(const void *a, const void *b) 
-    { 
-        const int *ia = (const int *)a; // casting pointer types 
-            const int *ib = (const int *)b;
-                return *ia  - *ib; 
-                    /* integer comparison: returns negative if b > a 
-                        and positive if a > b */ 
-                        }
+    CmpFunc cmp;
     size_t depth;
 } threadArgs;
 
@@ -26,7 +19,7 @@ void sortArray(size_t depth, Array a, SortFunc sort, CmpFunc cmp){
         size_t num = getNumElmnts(a);
         size_t size = getSizeElmnts(a);
         void *data = getDataPtr(a);
-        sort(a, num, size, cmp);
+        sort(data, num, size, cmp);
     }else{
         threadArgs args = {a, sort, cmp, depth};
         sortThread((void *)&args);
@@ -50,7 +43,7 @@ static void *sortThread(void *args){
         Array one = newArray(size, num - half);
         Array two = newArray(size, half);
 
-        for(int i = 0; i < half){
+        for(int i = 0; i < half; i++){
             setElmnt(i, getElmnt(i * 2, a), one);
             setElmnt(i, getElmnt(1 + (i * 2), a), two);
         }
@@ -65,20 +58,20 @@ static void *sortThread(void *args){
 
         pthread_t tidOne, tidTwo;
 
-        pthread_create(&tidOne, NULL, sortThread, (void *)threadOne);
-        pthread_create(&tidTwo, NULL, sortThread, (void *)threadTwo);
+        pthread_create(&tidOne, NULL, sortThread, (void *)&threadOne);
+        pthread_create(&tidTwo, NULL, sortThread, (void *)&threadTwo);
 
         pthread_join(tidOne, NULL);
         pthread_join(tidTwo, NULL);
 
-        mergeThreads(tArgs, one, two);
+        mergeThreads(*tArgs, one, two);
 
-        disposeArray(one);
-        disposeArray(two);
+        disposeArray(&one);
+        disposeArray(&two);
     }else{
         
         SortFunc sort = tArgs->sort;
-        SortFunc cmp = tArgs->cmp;
+        CmpFunc cmp = tArgs->cmp;
         Array a = tArgs->array;
 
         int num = getNumElmnts(a);
@@ -86,9 +79,10 @@ static void *sortThread(void *args){
 
         void *data = getDataPtr(a);
 
-        sort(a, num, size, cmp);
+        sort(data, num, size, cmp);
 
     }
+    return NULL;
 }
         
 static void mergeThreads(threadArgs dest, Array one, Array two){
@@ -129,6 +123,6 @@ static void mergeThreads(threadArgs dest, Array one, Array two){
     while(putTwo != lenTwo){
         void *val = getElmnt(putOne, one);
         setElmnt(putOne + putTwo, val, master);
-        putOne++;
+        putTwo++;
     }
 }
