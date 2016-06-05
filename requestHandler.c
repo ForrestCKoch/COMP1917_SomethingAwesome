@@ -16,21 +16,21 @@ void sortRequestHandler(int depth, char *input, char *output, char *dataStr, cha
     ReadFunc readFile = NULL;
     WriteFunc writeFile = NULL;
 
-    loadFunc(dataMod, cmp, "cmp");
-    loadFunc(dataMod, readFile, "readFile");
-    loadFunc(dataMod, writeFile, "writeFile");
-    loadFunc(sortMod, sort, "sort");
+    loadFunc(dataMod, (gpointer *)&cmp, "cmp");
+    loadFunc(dataMod, (gpointer *)&readFile, "readFile");
+    loadFunc(dataMod, (gpointer *)&writeFile, "writeFile");
+    loadFunc(sortMod, (gpointer *)&sort, "sort");
 
     Array data = readFile(input);
 
-    sort(depth, data, sort, cmp);
+    sortArray(depth, data, sort, cmp);
 
-    writeFile(data);
+    writeFile(data, output);
 
     g_module_close(dataMod);
     dataMod = NULL;
 
-    g_module_clsoe(sortMod);
+    g_module_close(sortMod);
     sortMod = NULL;
 }
 
@@ -60,7 +60,8 @@ static void loadFunc(GModule *mod, gpointer *func, gchar *funcName){
     
     g_module_symbol(mod, funcName, func);
     if(!func){
-        printf("Error loading function %s\n", funcName);
+        printf("Error loading function %s from module %s\n", 
+                funcName, g_module_name(mod));
         exit(1);
     }
 }
