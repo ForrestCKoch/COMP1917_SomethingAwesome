@@ -121,7 +121,7 @@ static void mergeThreads(threadArgs dest, Array one, Array two){
     }
 
     while(putTwo != lenTwo){
-        void *val = getElmnt(putOne, one);
+        void *val = getElmnt(putTwo, two);
         setElmnt(putOne + putTwo, val, master);
         putTwo++;
     }
