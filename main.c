@@ -4,6 +4,7 @@
 
 int main(int argc, char *argv[]){
     
+    // i.e ./Run test.txt output.txt numbers myQsort 0
     if(argc != 6){
         printf("Proper usage is: ./Run in.file out.file dataMod sortMod threadPower\n");
         exit(1);
