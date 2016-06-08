@@ -1,6 +1,7 @@
 #include <stdlib.h>
-#include "Array.h"
+#include <assert.h>
 #include <string.h>
+#include "Array.h"
 
 typedef struct _array{
     
@@ -58,6 +59,7 @@ void * getDataPtr(Array a){
 void * getElmnt(size_t index, Array a){
 
     void *elmnt;
+    assert(index < a->num);
 
     elmnt = a->data + (a->size * index);
 
@@ -65,6 +67,8 @@ void * getElmnt(size_t index, Array a){
 }
 
 void setElmnt(size_t index, void * value, Array a){
+
+    assert(index < a->num);
 
     memcpy(a->data + (index * a->size), value, a->size);
 
