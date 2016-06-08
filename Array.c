@@ -17,7 +17,8 @@ Array newArray(size_t size, size_t num){
 
     if(size > 0 && num > 0){
         a = (array *)malloc(sizeof(array));
-        
+        assert(a);
+
         a->size = size;
         a->num = num;
 
@@ -43,23 +44,31 @@ void disposeArray(Array *a){
 
 size_t getNumElmnts(Array a){
     
+    assert(a);
+
     return a->num;
 }
 
 size_t getSizeElmnts(Array a){
     
+    assert(a);
+
     return a->size;
 }
 
 void * getDataPtr(Array a){
     
+    assert(a);
+
     return a->data;
 }
 
 void * getElmnt(size_t index, Array a){
 
     void *elmnt;
+    // crash the program given invalid input
     assert(index < a->num);
+    assert(a);
 
     elmnt = a->data + (a->size * index);
 
@@ -68,7 +77,10 @@ void * getElmnt(size_t index, Array a){
 
 void setElmnt(size_t index, void * value, Array a){
 
+    // crash the program given invalid input
     assert(index < a->num);
+    assert(value);
+    assert(a);
 
     memcpy(a->data + (index * a->size), value, a->size);
 
