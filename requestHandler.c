@@ -27,6 +27,8 @@ void sortRequestHandler(int depth, char *input, char *output, char *dataStr, cha
 
     writeFile(data, output);
 
+    disposeArray(&data);
+
     g_module_close(dataMod);
     dataMod = NULL;
 
@@ -52,6 +54,7 @@ static GModule * openModule(gchar *modStr){
         printf("Error openning module at %s\n", modPath);
         exit(1);
     }
+    g_free(modPath);
 
     return module;
 }

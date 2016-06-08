@@ -1,6 +1,8 @@
 #include <pthread.h>
 #include <assert.h>
+#include <stdlib.h>
 #include "defs.h"
+
 
 typedef struct _threadArgs{
     Array array;
@@ -44,8 +46,10 @@ static void *sortThread(void *args){
         Array two = newArray(size, half);
 
         for(int i = 0; i < half; i++){
-            setElmnt(i, getElmnt(i * 2, a), one);
-            setElmnt(i, getElmnt(1 + (i * 2), a), two);
+            void *x = getElmnt(i * 2, a);
+            void *y = getElmnt(1 + (i * 2), a);
+            setElmnt(i, x, one);
+            setElmnt(i, y, two);
         }
 
         // now for odd case one should be larger
