@@ -1,65 +1,29 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include <time.h>
-
-#include "core.h"
-#include "algorithms.h"
-#include "modules.h"
-
-//MOVE THIS OUT!
-#define FILENAME_LENGTH 20
-#define THREAD_POWER 2
+#include "defs.h"
 
 int main(int argc, char *argv[]){
-
-    char inputFile[FILENAME_LENGTH];
-    char outputFile[FILENAME_LENGTH];
-
-    int threadPower;
-
-    time_t start;
-    time_t end;
-    int sec;
-
-    SortFunc sort;
-    dataStruct *modData;
     
-    // Should we move this out of main?
-    if(argc != 4){
-	printf("Proper usage is \"./Prog input.file output.file threadPower\".\n");
-	exit(1);
+    // i.e ./Run test.txt output.txt numbers myQsort 0
+    if(argc != 6){
+        printf("Proper usage is: ./Run in.file out.file dataMod sortMod threadPower\n");
+        exit(1);
     }
 
-    // Get file names
-    strcpy(inputFile, argv[1]);
-    strcpy(outputFile, argv[2]);
-    threadPower = atoi(argv[3]);
+    // 2^depth will be the # threads used
+    size_t depth = atoi(argv[5]);
 
-    modData = (dataStruct *)malloc(sizeof(dataStruct));
-    loadModule(modData, "NUMBERS");
+    // input/output files
+    char *input = argv[1];
+    char *output = argv[2];
 
-    sort = loadSort("MYQSORT");
+    // name of data & sorting mods to be used
+    char *dataMod = argv[3];
+    char *sortMod = argv[4];
 
-    // createJob should take in: 
-    //	    - name of input/outputfiles
-    //	    - sorting algorithm to use
-    //	    - number threads to use
-    //	    - data info struct?:
-    //		- pointer to data read function
-    //		- pointer to compare function
-    //		- size of data?
-    // createJob();
-    start = time(NULL);
-    createJob(inputFile, outputFile, threadPower, sort, modData);
-    end = time(NULL);
-    
-    free(modData);
-    modData = NULL;
 
-    sec = end - start;
-    printf("%d seconds to sort\n", sec);
+    //send request
+    sortRequestHandler(depth, input, output, dataMod, sortMod);
 
-    return EXIT_SUCCESS;
+    return 0;
 }
