@@ -16,6 +16,9 @@ Currently available modules:
     
     For Data:
         numbers
+        strings 
+        
+        *NOTE:(strings sorts words, if word lengths will be over 15 characters in length module will need to be recompiled with larger column size)
 
     For Sorting:
         myQsort
