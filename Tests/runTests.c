@@ -11,6 +11,7 @@ int main(int argc, char *argv[]){
 
     addTestArray();
     addTestSort();
+    addTestNumbers();
 
     return g_test_run();
 }
