@@ -4,7 +4,9 @@
 #include <assert.h>
 #include "../../defs.h"
 
-#define MAX_STRLEN 256
+#define MAX_STRLEN 32
+#define COL_SIZE 16
+#define COLUMNS 4
 
 int getAmount(FILE *fp);
 
@@ -46,16 +48,20 @@ void writeFile(Array a, char *filename){
         exit(EXIT_FAILURE);
     }
 
-    int row = 0;
+    int col = 0;
     int numElmnts = getNumElmnts(a);
     for(int i = 0; i < numElmnts; i++){
         fprintf(fp, "%s ", (char *)getElmnt(i, a));
-        row++;
-        if(row == 8){
+        col++;
+        if(col == COLUMNS){
             fprintf(fp, "\n");
-            row = 0;
+            col = 0;
         }else {
-            fprintf(fp, "\t");
+            int len = strlen((char *)getElmnt(i, a));
+            while(len < COL_SIZE){
+                fprintf(fp, " ");
+                len++;
+            }
         }
     }
 
