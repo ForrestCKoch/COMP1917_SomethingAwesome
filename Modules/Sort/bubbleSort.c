@@ -1,6 +1,6 @@
 #include <string.h>
 #include <stdlib.h>
-#include "../defs.h"
+#include "../../defs.h"
 
 #define TRUE 1
 #define FALSE 0
