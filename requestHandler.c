@@ -3,19 +3,22 @@
 #include <stdlib.h>
 #include "defs.h"
 
-static GModule * openModule(gchar *modStr);
+static GModule * openModule(gchar *modDir, gchar *modStr);
 static void loadFunc(GModule *mod, gpointer *func, gchar *funcName);
 
 void sortRequestHandler(int depth, char *input, char *output, char *dataStr, char*sortStr){
     
-    GModule *dataMod = openModule(dataStr);
-    GModule *sortMod = openModule(sortStr);
+    
+    //  First we need to load the requested modules into the program
+    GModule *dataMod = openModule(DATA_MOD_DIR, dataStr);
+    GModule *sortMod = openModule(SORT_MOD_DIR, sortStr);
 
     CmpFunc cmp = NULL;
     SortFunc sort = NULL;
     ReadFunc readFile = NULL;
     WriteFunc writeFile = NULL;
 
+    //  Now to get functions from the modules
     loadFunc(dataMod, (gpointer *)&cmp, "cmp");
     loadFunc(dataMod, (gpointer *)&readFile, "readFile");
     loadFunc(dataMod, (gpointer *)&writeFile, "writeFile");
@@ -36,15 +39,15 @@ void sortRequestHandler(int depth, char *input, char *output, char *dataStr, cha
     sortMod = NULL;
 }
 
-static GModule * openModule(gchar *modStr){
+static GModule * openModule(gchar *modDir, gchar *modStr){
 
     GModule *module;
 
-    gchar * modPath = g_module_build_path(MODULE_DIR, modStr);
+    gchar * modPath = g_module_build_path(modDir, modStr);
 
     if(!modPath){
         printf("Could not find module:%s in module directory: %s\n",
-                modStr, MODULE_DIR);
+                modStr, modDir);
         exit(1);
     }
 

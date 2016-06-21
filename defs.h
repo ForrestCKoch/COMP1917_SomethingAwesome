@@ -3,8 +3,11 @@
 
 #include "Array.h"
 
-#define MODULE_DIR "/home/forrest/Documents/COMP1917/SomethingAwesome/"\
-                   "COMP1917_SomethingAwesome/Modules"
+#define DATA_MOD_DIR "/home/forrest/Documents/COMP1917/SomethingAwesome/"\
+                   "COMP1917_SomethingAwesome/Modules/Data"
+
+#define SORT_MOD_DIR "/home/forrest/Documents/COMP1917/SomethingAwesome/"\
+                   "COMP1917_SomethingAwesome/Modules/Sort"
 
 /* Functions to be implemented by modules */
 typedef int (*CmpFunc)(const void *a, const void *b);
